@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Gravity</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            background: #f5f7fb;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #222;
+        }
+
+        .container {
+            background: white;
+            width: 450px;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        p {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #4f46e5;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            background: #4f46e5;
+            color: white;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            background: #4338ca;
+        }
+
+        .result {
+            margin-top: 25px;
+            padding: 15px;
+            background: #eef2ff;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .result a {
+            color: #4f46e5;
+            text-decoration: none;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🔗 Project Gravity</h1>
+    <p>Paste a long URL and generate a short one.</p>
+
+    <input
+            type="url"
+            id="url"
+            placeholder="https://example.com/some/really/long/url"
+    >
+
+    <button id="shortenBtn">
+        Shorten URL
+    </button>
+
+    <div class="result" id="result">
+        <strong>Your short URL:</strong><br><br>
+        <a href="#" id="shortUrl">
+            http://localhost:3000/abc123
+        </a>
+    </div>
+</div>
+
+<script>
+    const button = document.getElementById("shortenBtn");
+    const input = document.getElementById("url");
+    const result = document.getElementById("result");
+    const shortUrl = document.getElementById("shortUrl");
+
+    button.addEventListener("click", async () => {
+        const originalUrl = input.value.trim();
+
+        if (!originalUrl) {
+            alert("Please enter a URL.");
+            return;
+        }
+        const response = await fetch("/links", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ originalUrl })
+        });
+
+        const data = await response.json();
+
+        shortUrl.href = data.shortCode;
+        shortUrl.textContent = data.shortCode;
+
+        // Temporary demo
+        const fake = "http://localhost:3000/" +
+            data.shortCode;
+
+        shortUrl.href = fake;
+        shortUrl.textContent = fake;
+        result.style.display = "block";
+    });
+</script>
+
+</body>
+</html>
