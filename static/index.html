@@ -6,96 +6,161 @@
     <title>Project Gravity</title>
 
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, Helvetica, sans-serif;
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:Inter,Arial,Helvetica,sans-serif;
         }
 
-        body {
-            background: #f5f7fb;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            color: #222;
+        body{
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            min-height:100vh;
+
+            background:
+                    radial-gradient(circle at top left,#3b82f6 0%,transparent 40%),
+                    radial-gradient(circle at bottom right,#7c3aed 0%,transparent 40%),
+                    linear-gradient(135deg,#0f172a,#111827);
+
+            color:white;
         }
 
-        .container {
-            background: white;
-            width: 450px;
-            padding: 40px;
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        .container{
+            width:460px;
+            padding:36px;
+
+            background:rgba(255,255,255,.08);
+            backdrop-filter:blur(18px);
+
+            border:1px solid rgba(255,255,255,.15);
+            border-radius:22px;
+
+            box-shadow:
+                    0 25px 60px rgba(0,0,0,.35),
+                    inset 0 1px rgba(255,255,255,.08);
         }
 
-        h1 {
-            text-align: center;
-            margin-bottom: 10px;
+        h1{
+            text-align:center;
+            font-size:32px;
+            margin-bottom:10px;
         }
 
-        p {
-            text-align: center;
-            color: #666;
-            margin-bottom: 30px;
+        p{
+            text-align:center;
+            color:#cbd5e1;
+            margin-bottom:28px;
+            line-height:1.5;
         }
 
-        input {
-            width: 100%;
-            padding: 14px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 16px;
-            margin-bottom: 15px;
+        input{
+            width:100%;
+            padding:15px 16px;
+
+            border-radius:12px;
+            border:1px solid rgba(255,255,255,.12);
+
+            background:rgba(255,255,255,.08);
+            color:white;
+
+            font-size:15px;
+
+            outline:none;
+            transition:.25s;
+
+            margin-bottom:18px;
         }
 
-        input:focus {
-            outline: none;
-            border-color: #4f46e5;
+        input::placeholder{
+            color:#94a3b8;
         }
 
-        button {
-            width: 100%;
-            padding: 14px;
-            border: none;
-            background: #4f46e5;
-            color: white;
-            font-size: 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: 0.2s;
+        input:focus{
+            border-color:#3b82f6;
+            box-shadow:0 0 0 4px rgba(59,130,246,.18);
         }
 
-        button:hover {
-            background: #4338ca;
+        button{
+            width:100%;
+            padding:15px;
+
+            border:none;
+            border-radius:12px;
+
+            background:linear-gradient(135deg,#3b82f6,#2563eb);
+            color:white;
+
+            font-size:15px;
+            font-weight:600;
+
+            cursor:pointer;
+            transition:.25s;
         }
 
-        .result {
-            margin-top: 25px;
-            padding: 15px;
-            background: #eef2ff;
-            border-radius: 8px;
-            display: none;
+        button:hover{
+            transform:translateY(-2px);
+            box-shadow:0 12px 24px rgba(59,130,246,.35);
         }
 
-        .result a {
-            color: #4f46e5;
-            text-decoration: none;
-            word-break: break-all;
+        button:active{
+            transform:scale(.98);
+        }
+
+        .result{
+            display:none;
+            margin-top:24px;
+
+            padding:18px;
+
+            border-radius:14px;
+
+            background:rgba(255,255,255,.06);
+            border:1px solid rgba(255,255,255,.1);
+
+            animation:fade .3s ease;
+        }
+
+        .result strong{
+            display:block;
+            margin-bottom:10px;
+            color:#e2e8f0;
+        }
+
+        .result a{
+            color:#60a5fa;
+            text-decoration:none;
+            word-break:break-word;
+            font-weight:600;
+        }
+
+        .result a:hover{
+            text-decoration:underline;
+        }
+
+        @keyframes fade{
+            from{
+                opacity:0;
+                transform:translateY(8px);
+            }
+            to{
+                opacity:1;
+                transform:translateY(0);
+            }
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>🔗 Project Gravity</h1>
-    <p>Paste a long URL and generate a short one.</p>
+    <h1>🌌 Project Gravity</h1>
+    <p>Create short, shareable links in seconds.</p>
 
     <input
             type="url"
             id="url"
-            placeholder="https://example.com/some/really/long/url"
+            placeholder="example.com"
     >
 
     <button id="shortenBtn">
@@ -103,7 +168,7 @@
     </button>
 
     <div class="result" id="result">
-        <strong>Your short URL:</strong><br><br>
+        <strong>Your short URL</strong>
         <a href="#" id="shortUrl">
             http://localhost:3000/abc123
         </a>
@@ -123,7 +188,8 @@
             alert("Please enter a URL.");
             return;
         }
-        const response = await fetch("/links", {
+
+        const response = await fetch("/api/links", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -133,15 +199,11 @@
 
         const data = await response.json();
 
-        shortUrl.href = data.shortCode;
-        shortUrl.textContent = data.shortCode;
+        const link = "http://localhost:3000/" + data.shortCode;
 
-        // Temporary demo
-        const fake = "http://localhost:3000/" +
-            data.shortCode;
+        shortUrl.href = link;
+        shortUrl.textContent = link;
 
-        shortUrl.href = fake;
-        shortUrl.textContent = fake;
         result.style.display = "block";
     });
 </script>
