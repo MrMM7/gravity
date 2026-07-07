@@ -21,10 +21,10 @@ Each version represents another step toward that goal.
 The diagrams below document how Gravity's architecture has evolved over time. Rather than replacing old designs, each
 version serves as a snapshot of the project's progression.
 
-### v0.5
-
-![v0.5](design/v0.5.png)
-
 ### v1
 
 ![v1](design/v1-2.png)
+
+### v0.5
+
+![v0.5](design/v0.5.png)
