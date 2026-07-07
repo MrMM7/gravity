@@ -27,4 +27,4 @@ version serves as a snapshot of the project's progression.
 
 ### v1
 
-![v1](design/v1.png)
+![v1](design/v1-2.png)
