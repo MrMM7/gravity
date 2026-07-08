@@ -36,6 +36,11 @@ To stop the container run:
 docker ps
 docker stop <container id>
 ```
+## Frontend Note
+
+Gravity is primarily a backend-focused project. The main goal of this project is to explore and demonstrate backend concepts such as API design, database interactions, application structure, and deployment.
+
+The frontend exists only as a simple interface to interact with the backend services and is not the main focus of the project. Most of the frontend implementation was generated with the assistance of AI tools, allowing the focus to remain on the backend architecture and engineering decisions.
 
 ## System Design Evolution
 
