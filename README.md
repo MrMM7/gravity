@@ -16,6 +16,27 @@ Each version represents another step toward that goal.
 * Express.js
 * SQLite
 
+## How to use
+You can use gravity through Docker.
+
+Build the Docker image:
+```bash
+docker build -t gravity .
+```
+
+Run the container:
+```bash
+docker run -p 3000:3000 -d gravity
+```
+
+And now the program should be running on http://localhost:3000
+
+To stop the container run:
+```bash
+docker ps
+docker stop <container id>
+```
+
 ## System Design Evolution
 
 The diagrams below document how Gravity's architecture has evolved over time. Rather than replacing old designs, each
