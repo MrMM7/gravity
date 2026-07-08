@@ -9,8 +9,8 @@ dotenv.configDotenv({
     quiet: true,
 });
 
-const homePage = fs.readFileSync('./static/index.html', 'utf8');
-const authPage = fs.readFileSync('./static/auth.html', 'utf8');
+const homePage = fs.readFileSync(`${__dirname}/static/index.html`, 'utf8');
+const authPage = fs.readFileSync(`${__dirname}/static/auth.html`, 'utf8');
 
 app.use(express.json())
 app.use(cookieParser())
