@@ -19,6 +19,11 @@ Each version represents another step toward that goal.
 ## How to use
 You can use gravity through Docker.
 
+Clone this repository:
+```bash
+git clone https://github.com/MrMM7/gravity.git
+```
+
 Build the Docker image:
 ```bash
 docker build -t gravity .
