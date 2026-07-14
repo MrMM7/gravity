@@ -1,0 +1,15 @@
+{
+  "name": "links-service",
+  "version": "1.0.0",
+  "description": "Links microservices",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}

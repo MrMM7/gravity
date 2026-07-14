@@ -1,0 +1,33 @@
+services:
+
+  gateway:
+    build: ./api-gateway
+    ports:
+      - "3000:3000"
+    depends_on:
+      - auth-service
+      - links-service
+      - frontend-service
+
+
+  auth-service:
+    build: ./auth-service
+    environment:
+      PORT: 3001
+    expose:
+      - "3001"
+
+
+  links-service:
+    build: ./links-service
+    environment:
+      PORT: "3002"
+    expose:
+      - "3002"
+
+  frontend-service:
+    build: ./frontend-service
+    environment:
+      PORT: 3003
+    expose:
+      - "3003"

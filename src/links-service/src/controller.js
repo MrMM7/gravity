@@ -1,5 +1,9 @@
 const { randomBytes } = require("crypto");
-const db = require("../utils/db");
+const db = require("./db");
+
+function generateShortCode(length = 6) {
+    return randomBytes(length).toString("base64url")
+}
 
 exports.getLink = (req, res) => {
     const { shortCode } = req.params;
@@ -17,12 +21,12 @@ exports.createNewLink = (req, res) => {
     const { originalUrl } = req.body;
 
     try {
-        const shortCode = randomBytes(6).toString("base64url")
+        const shortCode = generateShortCode()
         const url = originalUrl.includes("http") ? originalUrl : "https://" + originalUrl
         const prepare = db.prepare("INSERT INTO links (short_code, original_url) VALUES (?, ?)")
 
         prepare.run(shortCode, url)
-        res.send({ shortCode });
+        res.status(201).send({ shortCode });
     } catch (error) {
         res.status(400).send(error.toJSON())
     }
