@@ -54,7 +54,7 @@ version serves as a snapshot of the project's progression.
 
 ### v1.5
 
-![v1.5](design/v1.5.png)
+![v1.5](design/v1.5-2.png)
 
 ### v1
 

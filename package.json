@@ -1,9 +1,7 @@
 {
   "name": "gravity",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+  "description": "A simple URL shortener",
+  "author": "MrMM7",
+  "license": "Apache-2.0"
 }
