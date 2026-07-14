@@ -19,23 +19,28 @@ Each version represents another step toward that goal.
 ## How to use
 You can use gravity through Docker.
 
-Build the Docker image:
+Clone the repository:
 ```bash
-docker build -t gravity .
+git clone https://github.com/MrMM7/gravity.git
 ```
 
-Run the container:
+CD into the project's src/ directory:
 ```bash
-docker run -p 3000:3000 -d gravity
+cd gravity/src
 ```
 
-And now the program should be running on http://localhost:3000
-
-To stop the container run:
+Run the following command to start the service:
 ```bash
-docker ps
-docker stop <container id>
+docker compose up
 ```
+
+Now the application should be running on http://localhost:3000.
+
+To stop the service, run:
+```bash
+docker compose down
+```
+
 ## Frontend Note
 
 Gravity is primarily a backend-focused project. The main goal of this project is to explore and demonstrate backend concepts such as API design, database interactions, application structure, and deployment.
@@ -46,6 +51,10 @@ The frontend exists only as a simple interface to interact with the backend serv
 
 The diagrams below document how Gravity's architecture has evolved over time. Rather than replacing old designs, each
 version serves as a snapshot of the project's progression.
+
+### v1.5
+
+![v1.5](design/v1.5.png)
 
 ### v1
 

@@ -189,7 +189,7 @@
             return;
         }
 
-        const response = await fetch("/api/links", {
+        const response = await fetch("http://localhost:3000/api/links", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -199,7 +199,7 @@
 
         const data = await response.json();
 
-        const link = "http://localhost:3000/" + data.shortCode;
+        const link = "http://localhost:3000/r/" + data.shortCode;
 
         shortUrl.href = link;
         shortUrl.textContent = link;
