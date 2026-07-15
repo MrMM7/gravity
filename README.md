@@ -12,10 +12,12 @@ Each version represents another step toward that goal.
 
 ## Tech Stack
 
-* Node.js
-* Express.js
-* SQLite
-
+- Node.js
+- Express.js
+- SQLite
+- Docker
+- http-proxy-middleware (API Gateway / request routing)
+  
 ## How to use
 You can use gravity through Docker.
 
