@@ -1,0 +1,15 @@
+{
+  "name": "analytics-service",
+  "version": "1.0.0",
+  "description": "Analytics service for the URL shortener",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}

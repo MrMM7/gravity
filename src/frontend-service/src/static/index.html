@@ -6,206 +6,480 @@
     <title>Project Gravity</title>
 
     <style>
-        *{
-            margin:0;
-            padding:0;
-            box-sizing:border-box;
-            font-family:Inter,Arial,Helvetica,sans-serif;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Inter, Arial, Helvetica, sans-serif;
         }
 
-        body{
-            display:flex;
-            justify-content:center;
-            align-items:center;
-            min-height:100vh;
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
 
-            background:
-                    radial-gradient(circle at top left,#3b82f6 0%,transparent 40%),
-                    radial-gradient(circle at bottom right,#7c3aed 0%,transparent 40%),
-                    linear-gradient(135deg,#0f172a,#111827);
+            background: radial-gradient(circle at top left, #3b82f6 0%, transparent 40%),
+            radial-gradient(circle at bottom right, #7c3aed 0%, transparent 40%),
+            linear-gradient(135deg, #0f172a, #111827);
 
-            color:white;
+            color: white;
         }
 
-        .container{
-            width:460px;
-            padding:36px;
+        /* Main card */
+        .container {
+            width: 460px;
+            padding: 36px;
 
-            background:rgba(255,255,255,.08);
-            backdrop-filter:blur(18px);
+            background: rgba(255, 255, 255, .08);
+            backdrop-filter: blur(18px);
 
-            border:1px solid rgba(255,255,255,.15);
-            border-radius:22px;
+            border: 1px solid rgba(255, 255, 255, .15);
+            border-radius: 22px;
 
-            box-shadow:
-                    0 25px 60px rgba(0,0,0,.35),
-                    inset 0 1px rgba(255,255,255,.08);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, .35),
+            inset 0 1px rgba(255, 255, 255, .08);
         }
 
-        h1{
-            text-align:center;
-            font-size:32px;
-            margin-bottom:10px;
+        h1 {
+            text-align: center;
+            font-size: 32px;
+            margin-bottom: 10px;
         }
 
-        p{
-            text-align:center;
-            color:#cbd5e1;
-            margin-bottom:28px;
-            line-height:1.5;
+        p {
+            text-align: center;
+            color: #cbd5e1;
+            margin-bottom: 28px;
+            line-height: 1.5;
         }
 
-        input{
-            width:100%;
-            padding:15px 16px;
+        /* Inputs */
+        input {
+            width: 100%;
+            padding: 15px 16px;
 
-            border-radius:12px;
-            border:1px solid rgba(255,255,255,.12);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, .12);
 
-            background:rgba(255,255,255,.08);
-            color:white;
+            background: rgba(255, 255, 255, .08);
+            color: white;
 
-            font-size:15px;
+            font-size: 15px;
 
-            outline:none;
-            transition:.25s;
+            outline: none;
+            transition: .25s;
 
-            margin-bottom:18px;
+            margin-bottom: 18px;
         }
 
-        input::placeholder{
-            color:#94a3b8;
+        input::placeholder {
+            color: #94a3b8;
         }
 
-        input:focus{
-            border-color:#3b82f6;
-            box-shadow:0 0 0 4px rgba(59,130,246,.18);
+        input:focus {
+            border-color: #3b82f6;
+
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, .18);
         }
 
-        button{
-            width:100%;
-            padding:15px;
 
-            border:none;
-            border-radius:12px;
+        /* Buttons */
+        button {
+            width: 100%;
+            padding: 15px;
 
-            background:linear-gradient(135deg,#3b82f6,#2563eb);
-            color:white;
+            border: none;
+            border-radius: 12px;
 
-            font-size:15px;
-            font-weight:600;
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
 
-            cursor:pointer;
-            transition:.25s;
+            color: white;
+
+            font-size: 15px;
+            font-weight: 600;
+
+            cursor: pointer;
+            transition: .25s;
         }
 
-        button:hover{
-            transform:translateY(-2px);
-            box-shadow:0 12px 24px rgba(59,130,246,.35);
+        button:hover {
+            transform: translateY(-2px);
+
+            box-shadow: 0 12px 24px rgba(59, 130, 246, .35);
         }
 
-        button:active{
-            transform:scale(.98);
+        button:active {
+            transform: scale(.98);
         }
 
-        .result{
-            display:none;
-            margin-top:24px;
 
-            padding:18px;
+        /* Short URL result */
+        .result {
+            display: none;
+            margin-top: 24px;
 
-            border-radius:14px;
+            padding: 18px;
 
-            background:rgba(255,255,255,.06);
-            border:1px solid rgba(255,255,255,.1);
+            border-radius: 14px;
 
-            animation:fade .3s ease;
+            background: rgba(255, 255, 255, .06);
+
+            border: 1px solid rgba(255, 255, 255, .1);
+
+            animation: fade .3s ease;
         }
 
-        .result strong{
-            display:block;
-            margin-bottom:10px;
-            color:#e2e8f0;
+        .result strong {
+            display: block;
+            margin-bottom: 10px;
+
+            color: #e2e8f0;
         }
 
-        .result a{
-            color:#60a5fa;
-            text-decoration:none;
-            word-break:break-word;
-            font-weight:600;
+        .result a {
+            color: #60a5fa;
+
+            text-decoration: none;
+
+            word-break: break-word;
+
+            font-weight: 600;
         }
 
-        .result a:hover{
-            text-decoration:underline;
+        .result a:hover {
+            text-decoration: underline;
         }
 
-        @keyframes fade{
-            from{
-                opacity:0;
-                transform:translateY(8px);
+
+        /* Animations */
+        @keyframes fade {
+
+            from {
+                opacity: 0;
+                transform: translateY(8px);
             }
-            to{
-                opacity:1;
-                transform:translateY(0);
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
+
         }
+
+
+        /* Analytics modal */
+        .modal-hidden {
+            display: none;
+        }
+
+
+        .modal-visible {
+
+            position: fixed;
+            inset: 0;
+
+            display: flex;
+
+            justify-content: center;
+            align-items: center;
+
+            background: rgba(0, 0, 0, .6);
+
+            backdrop-filter: blur(6px);
+
+            z-index: 1000;
+        }
+
+
+        /* Modal card */
+        .modal-card {
+
+            width: 420px;
+
+            max-width: 90vw;
+
+            padding: 22px;
+
+            position: relative;
+
+            border-radius: 22px;
+
+            color: #e6e6e6;
+
+
+            background: linear-gradient(
+                    180deg,
+                    #0f172a 0%,
+                    #111827 100%
+            );
+
+
+            border: 1px solid rgba(255, 255, 255, .08);
+
+
+            box-shadow: 0 30px 80px rgba(0, 0, 0, .6);
+
+
+            animation: fade .25s ease;
+        }
+
+
+        /* Close button */
+        .modal-close {
+
+            position: absolute;
+
+            right: 12px;
+            top: 12px;
+
+
+            width: auto;
+
+            padding: 6px 10px;
+
+
+            background: transparent;
+
+
+            color: #cbd5e1;
+
+
+            font-size: 20px;
+
+
+            border-radius: 8px;
+
+
+            transition: .25s ease;
+        }
+
+
+        .modal-close:hover {
+
+            color: #ef4444;
+
+            background: rgba(239, 68, 68, .12);
+
+            transform: none;
+
+            box-shadow: none;
+        }
+
+
+        /* Modal text */
+        .modal-card h3 {
+
+            margin-bottom: 8px;
+
+            text-align: center;
+        }
+
+
+        .muted {
+
+            color: #9ca3af;
+
+            text-align: center;
+
+            margin-bottom: 12px;
+        }
+
+
+        /* Modal input */
+        .modal-card input {
+
+            width: 100%;
+
+            padding: 12px;
+
+            margin-bottom: 12px;
+        }
+
+
+        /* Analytics button */
+        .modal-card .primary {
+
+            width: 100%;
+
+            padding: 12px;
+
+            border-radius: 10px;
+
+
+            background: linear-gradient(
+                    135deg,
+                    #6b21a8,
+                    #8b5cf6
+            );
+
+
+            font-weight: 700;
+        }
+
+
+        /* Analytics result */
+        .analytics-result {
+            display: none;
+            margin-top: 10px;
+            padding: 12px;
+            background: rgba(255, 255, 255, .02);
+            border: 1px solid rgba(255, 255, 255, .04);
+            border-radius: 10px;
+        }
+
     </style>
 </head>
+
 <body>
 
 <div class="container">
+
     <h1>🌌 Project Gravity</h1>
     <p>Create short, shareable links in seconds.</p>
 
-    <input
-            type="url"
-            id="url"
-            placeholder="example.com"
-    >
+    <input id="url" placeholder="example.com">
 
-    <button id="shortenBtn">
-        Shorten URL
+    <button id="shortenBtn">Shorten URL</button>
+
+    <button id="analyticsBtn" style="margin-top:12px;background:linear-gradient(135deg,#6b21a8,#8b5cf6)">
+        Analytics
     </button>
 
     <div class="result" id="result">
         <strong>Your short URL</strong>
-        <a href="#" id="shortUrl">
-            http://localhost:3000/abc123
-        </a>
+        <a id="shortUrl"></a>
     </div>
+
 </div>
 
+
+<!-- IMPORTANT: outside container -->
+<div id="analyticsModal" class="modal-hidden">
+
+    <div class="modal-card">
+
+        <button id="closeAnalytics" class="modal-close">×</button>
+
+        <h3>Analytics</h3>
+
+        <p>
+            Enter a short code to request analytics.
+        </p>
+
+        <input id="analyticsCode" placeholder="abc123">
+
+        <button id="getAnalyticsBtn" class="primary">
+            Get Analytics
+        </button>
+
+        <div id="analyticsResult" class="analytics-result">
+            <div id="analyticsContent"></div>
+        </div>
+
+    </div>
+
+</div>
+
+
 <script>
-    const button = document.getElementById("shortenBtn");
-    const input = document.getElementById("url");
+
+    const shortenBtn = document.getElementById("shortenBtn");
+    const url = document.getElementById("url");
     const result = document.getElementById("result");
     const shortUrl = document.getElementById("shortUrl");
 
-    button.addEventListener("click", async () => {
-        const originalUrl = input.value.trim();
+    shortenBtn.onclick = async () => {
 
-        if (!originalUrl) {
-            alert("Please enter a URL.");
-            return;
-        }
+        let originalUrl = url.value.trim();
 
-        const response = await fetch("http://localhost:3000/api/links", {
+        if (!originalUrl) return alert("Enter a URL");
+
+        let res = await fetch("/api/links", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ originalUrl })
+            body: JSON.stringify({originalUrl})
         });
 
-        const data = await response.json();
+        if (!res.ok)
+            return alert(await res.text());
 
-        const link = "http://localhost:3000/r/" + data.shortCode;
+        let data = await res.json();
+
+        let link = location.origin + "/r/" + data.short_code;
 
         shortUrl.href = link;
         shortUrl.textContent = link;
 
         result.style.display = "block";
-    });
+
+    };
+
+
+    const modal = document.getElementById("analyticsModal");
+    const analyticsBtn = document.getElementById("analyticsBtn");
+    const closeBtn = document.getElementById("closeAnalytics");
+
+    analyticsBtn.onclick = () => {
+        modal.className = "modal-visible";
+    };
+
+    closeBtn.onclick = () => {
+        modal.className = "modal-hidden";
+    };
+
+    modal.onclick = e => {
+        if (e.target === modal)
+            modal.className = "modal-hidden";
+    };
+
+
+    document.getElementById("getAnalyticsBtn").onclick = async () => {
+
+        let code = document.getElementById("analyticsCode").value.trim();
+
+        if (!code)
+            return alert("Enter short code");
+
+
+        let box = document.getElementById("analyticsResult");
+        let content = document.getElementById("analyticsContent");
+
+
+        try {
+
+            let res = await fetch(
+                "/api/analytics/links/" + encodeURIComponent(code)
+            );
+
+
+            if (!res.ok)
+                throw new Error(await res.text());
+
+
+            let data = await res.json();
+
+
+            content.innerHTML =
+                `
+<strong>Short code:</strong> ${data.link_id ?? code}<br>
+<strong>Clicks:</strong> ${data.clicks ?? data.click_count ?? "N/A"}
+`;
+
+            box.style.display = "block";
+
+
+        } catch (e) {
+
+            content.textContent = "Error: " + e.message;
+            box.style.display = "block";
+
+        }
+
+    };
+
 </script>
 
 </body>
