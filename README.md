@@ -43,6 +43,10 @@ To stop the service, run:
 docker compose down
 ```
 
+## Documentation
+
+To see all the API endpoints and their usage, visit the [API Documentation](http://localhost:3000/api-docs) page.
+
 ## Frontend Note
 
 Gravity is primarily a backend-focused project. The main goal of this project is to explore and demonstrate backend concepts such as API design, database interactions, application structure, and deployment.
