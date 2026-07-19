@@ -29,12 +29,23 @@ app.use(
         changeOrigin: true,
     })
 );
+
 // For redirect
 app.use(
     "/r",
     createProxyMiddleware({
         target: "http://links-service:3002",
         changeOrigin: true
+    })
+);
+
+// Analytics service
+app.use(
+    "/api/analytics",
+    createProxyMiddleware({
+        target: "http://analytics-service:3004",
+        changeOrigin: true,
+        pathRewrite: { '^/api/analytics': '' }
     })
 );
 
@@ -46,6 +57,7 @@ app.use(
         changeOrigin: true,
     }),
 );
+
 app.use(
     "/",
     verifySession,
