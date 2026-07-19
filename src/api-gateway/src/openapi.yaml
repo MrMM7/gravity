@@ -1,0 +1,523 @@
+openapi: 3.0.0
+info:
+  title: Gravity API
+  description: API Gateway for URL shortener service with analytics
+  version: 1.5.0
+
+paths:
+  /api/auth/register:
+    post:
+      tags:
+        - Authentication
+      summary: Register a new user
+      description: Creates a new user account with the provided credentials
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - email
+                - password
+              properties:
+                name:
+                  type: string
+                  description: Username for the new account
+                  example: john_doe
+                email:
+                  type: string
+                  format: email
+                  description: Email address of the user
+                  example: john@example.com
+                password:
+                  type: string
+                  format: password
+                  description: Password for the account
+                  example: securePassword123
+      responses:
+        '200':
+          description: User successfully registered and redirected
+          headers:
+            Set-Cookie:
+              schema:
+                type: string
+                example: sessionId=abc123def456; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000
+        '400':
+          description: Bad request - missing required fields or user already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                missingFields:
+                  value:
+                    message: Name, email and password are required
+                userExists:
+                  value:
+                    message: User or email already exists
+
+  /api/auth/login:
+    post:
+      tags:
+        - Authentication
+      summary: Login a user
+      description: Authenticates a user and creates a session
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - password
+              properties:
+                name:
+                  type: string
+                  description: Username for login
+                  example: john_doe
+                password:
+                  type: string
+                  format: password
+                  description: User password
+                  example: securePassword123
+      responses:
+        '200':
+          description: User successfully logged in
+          headers:
+            Set-Cookie:
+              schema:
+                type: string
+                example: sessionId=abc123def456; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Bad request - invalid credentials or missing fields
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                missingFields:
+                  value:
+                    message: Username and password are required
+                userNotFound:
+                  value:
+                    error: User not found
+                invalidPassword:
+                  value:
+                    error: Password is incorrect
+
+  /api/auth/verify:
+    get:
+      tags:
+        - Authentication
+      summary: Verify session
+      description: Verifies if the current session is valid
+      parameters:
+        - in: cookie
+          name: sessionId
+          schema:
+            type: string
+          required: true
+          description: Session cookie
+      responses:
+        '200':
+          description: Session is valid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Session'
+        '400':
+          description: Bad request - session does not exist or invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                noSession:
+                  value:
+                    message: Session does not exist
+                invalidSession:
+                  value:
+                    message: No such session
+
+  /api/links:
+    post:
+      tags:
+        - Links
+      summary: Create a new shortened link
+      description: Creates a new shortened URL with analytics tracking
+      security:
+        - sessionCookie: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - originalUrl
+              properties:
+                originalUrl:
+                  type: string
+                  format: uri
+                  description: The original URL to be shortened
+                  example: https://www.example.com/very/long/url/path
+      responses:
+        '201':
+          description: Link successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LinkCreated'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/links/{shortCode}:
+    get:
+      tags:
+        - Links
+      summary: Redirect to original URL
+      description: Redirects to the original URL associated with the short code and tracks the click
+      parameters:
+        - in: path
+          name: shortCode
+          schema:
+            type: string
+          required: true
+          description: The short code of the link
+          example: abc123
+      responses:
+        '301':
+          description: Permanent redirect to the original URL
+          headers:
+            Location:
+              schema:
+                type: string
+                format: uri
+                example: https://www.example.com/very/long/url/path
+        '404':
+          description: Link not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: Link not found
+
+  /r/{shortCode}:
+    get:
+      tags:
+        - Links
+      summary: Redirect using short path
+      description: Alternative short redirect path that redirects to the original URL and tracks the click
+      parameters:
+        - in: path
+          name: shortCode
+          schema:
+            type: string
+          required: true
+          description: The short code of the link
+          example: abc123
+      responses:
+        '301':
+          description: Permanent redirect to the original URL
+          headers:
+            Location:
+              schema:
+                type: string
+                format: uri
+                example: https://www.example.com/very/long/url/path
+        '404':
+          description: Link not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: Link not found
+
+  /api/analytics/links:
+    post:
+      tags:
+        - Analytics
+      summary: Create analytics record for a new link
+      description: Creates a new analytics entry for tracking clicks on a shortened link
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+              properties:
+                id:
+                  type: string
+                  description: The short code/ID for the link
+                  example: abc123
+      responses:
+        '201':
+          description: Analytics record successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Analytics'
+        '404':
+          description: Link already exists or error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: Link already exists
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: Internal server error
+
+  /api/analytics/links/{id}:
+    post:
+      tags:
+        - Analytics
+      summary: Track a click for a link
+      description: Increments the click count for a specific shortened link
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: The short code/ID of the link
+          example: abc123
+      responses:
+        '200':
+          description: Click successfully tracked
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Analytics'
+        '404':
+          description: Link not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: Link not found
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: Internal server error
+    get:
+      tags:
+        - Analytics
+      summary: Get analytics for a link
+      description: Retrieves click analytics data for a specific shortened link
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: The short code/ID of the link
+          example: abc123
+      responses:
+        '200':
+          description: Analytics data successfully retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Analytics'
+        '404':
+          description: Link not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: Link not found
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: Internal server error
+
+  /auth:
+    get:
+      tags:
+        - Frontend
+      summary: Get authentication page
+      description: Returns the authentication HTML page for user login and registration
+      responses:
+        '200':
+          description: Authentication page successfully retrieved
+          content:
+            text/html:
+              schema:
+                type: string
+              example: '<html>...</html>'
+
+  /:
+    get:
+      tags:
+        - Frontend
+      summary: Get home page
+      description: Returns the home page HTML
+      security:
+        - sessionCookie: []
+      responses:
+        '200':
+          description: Home page successfully retrieved
+          content:
+            text/html:
+              schema:
+                type: string
+              example: '<html>...</html>'
+        '400':
+          description: Session required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: User ID
+          example: 1
+        name:
+          type: string
+          description: Username
+          example: john_doe
+        email:
+          type: string
+          format: email
+          description: User email address
+          example: john@example.com
+      required:
+        - id
+        - name
+        - email
+
+    Session:
+      type: object
+      properties:
+        session_id:
+          type: string
+          format: uuid
+          description: Session ID
+          example: 550e8400-e29b-41d4-a716-446655440000
+        user_id:
+          type: integer
+          description: Associated user ID
+          example: 1
+        created_at:
+          type: integer
+          description: Session creation timestamp (milliseconds)
+          example: 1698765432000
+        expires_at:
+          type: integer
+          description: Session expiration timestamp (milliseconds)
+          example: 1730301432000
+      required:
+        - session_id
+        - user_id
+        - created_at
+        - expires_at
+
+    Link:
+      type: object
+      properties:
+        short_code:
+          type: string
+          description: The shortened code for the URL
+          example: abc123
+        original_url:
+          type: string
+          format: uri
+          description: The original full URL
+          example: https://www.example.com/very/long/url/path
+      required:
+        - short_code
+        - original_url
+
+    LinkCreated:
+      allOf:
+        - $ref: '#/components/schemas/Link'
+        - type: object
+          properties:
+            analytics:
+              $ref: '#/components/schemas/Analytics'
+          required:
+            - analytics
+
+    Analytics:
+      type: object
+      properties:
+        link_id:
+          type: string
+          description: The short code/ID of the link
+          example: abc123
+        clicks:
+          type: integer
+          description: Number of clicks tracked
+          example: 42
+      required:
+        - link_id
+        - clicks
+
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error message
+          example: An error occurred
+        error:
+          type: string
+          description: Error details
+          example: Detailed error information
+      required:
+        - message
+
+  securitySchemes:
+    sessionCookie:
+      type: apiKey
+      in: cookie
+      name: sessionId
+      description: Session cookie for authenticated requests
+
+tags:
+  - name: Authentication
+    description: User authentication endpoints
+  - name: Links
+    description: URL shortening and redirection endpoints
+  - name: Analytics
+    description: Link analytics tracking endpoints
+  - name: Frontend
+    description: Frontend page serving endpoints
