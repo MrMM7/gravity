@@ -1,9 +1,15 @@
+const fs = require('fs');
 const express = require('express');
 const cors = require('cors');
+const swaggerUi = require('swagger-ui-express');
+const YAML = require('js-yaml');
+const swaggerDocument = YAML.load(fs.readFileSync(`${__dirname}/openapi.yaml`, 'utf8'));
 
 const {createProxyMiddleware} = require("http-proxy-middleware");
 
+
 const app = express();
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 const verifySession = require("./middlewares/auth");
 
