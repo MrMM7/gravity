@@ -58,6 +58,7 @@ The frontend exists only as a simple interface to interact with the backend serv
 
 The diagrams below document how Gravity's architecture has evolved over time. Rather than replacing old designs, each
 version serves as a snapshot of the project's progression.
+If you want to see the original board used for these systems below check this [Excalidraw board](https://excalidraw.com/#json=0xt9jqygoXfPMtenrc5OC,FEkaH7QezPnkwKsMZrWA8g).
 
 ### v2
 
