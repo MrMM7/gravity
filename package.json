@@ -1,7 +1,7 @@
 {
   "name": "gravity",
-  "version": "1.0.0",
-  "description": "A simple URL shortener",
+  "version": "2.0.0",
+  "description": "one URL shortener to rule them all",
   "author": "MrMM7",
   "license": "Apache-2.0"
 }
