@@ -1,29 +1,19 @@
 const { randomBytes } = require("crypto");
 const db = require("./db");
+const { sendClickAnalytics, sendGenerateAnalytics } = require("./producer")
 
 function generateShortCode(length = 6) {
     return randomBytes(length).toString("base64url")
 }
 
 async function generateAnalytics(shortCode) {
-    const res = await fetch("http://analytics-service:3004/links", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ id: shortCode })
-    });
-    return res.json();
+    sendGenerateAnalytics({ shortCode });
+    return { message: "Successfully generated analytics" };
 }
 
 async function incrementClickAnalytics(shortCode) {
-    const res = await fetch(`http://analytics-service:3004/links/${shortCode}`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        }
-    });
-    return res.json();
+    sendClickAnalytics({ shortCode });
+    return { message: "Successfully incremented click analytics" };
 }
 
 exports.getLink = async (req, res) => {
@@ -53,10 +43,11 @@ exports.createNewLink = async (req, res) => {
         const shortCode = generateShortCode()
         const url = originalUrl.includes("http") ? originalUrl : "https://" + originalUrl
         const linkStmt = db.prepare("INSERT INTO links (short_code, original_url) VALUES (?, ?) RETURNING *");
-        const analytics = await generateAnalytics(shortCode)
+
+        await generateAnalytics(shortCode)
 
         const newLink = linkStmt.get(shortCode, url)
-        res.status(201).send({ ...newLink, analytics });
+        res.status(201).send({ ...newLink });
     } catch (error) {
         res.status(400).send(error)
     }

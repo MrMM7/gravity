@@ -1,4 +1,15 @@
 services:
+  rabbitmq:
+    image: rabbitmq:4-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: [ "CMD", "rabbitmq-diagnostics", "check_running" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
   gateway:
     build: ./api-gateway
@@ -20,11 +31,13 @@ services:
   links-service:
     build: ./links-service
     environment:
-      PORT: "3002"
+      PORT: 3002
+      RABBITMQ_URL: amqp://rabbitmq:5672
+    restart: unless-stopped
     expose:
       - "3002"
     depends_on:
-      - analytics-service
+      - rabbitmq
 
   frontend-service:
     build: ./frontend-service
@@ -37,5 +50,9 @@ services:
     build: ./analytics-service
     environment:
       PORT: 3004
+      RABBITMQ_URL: amqp://rabbitmq:5672
+    restart: unless-stopped
     expose:
       - "3004"
+    depends_on:
+      - rabbitmq
