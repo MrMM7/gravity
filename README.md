@@ -1,4 +1,4 @@
-Status: Finished - This project is done and I don't plan on making further updates. No new updates are planned.
+Status: Finished - This project is done and I don't plan on making further updates.
 # Gravity
 
 > One URL shortener to rule them all.
